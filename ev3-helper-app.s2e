@@ -2,7 +2,8 @@
     "extensionName": "EV3 helper app", 
     "extensionPort": 8080,
     "blockSpecs": [
-	["r", "distance", "distance" ]
+        ["r", "distance", "distance" ],
+        ["r", "touch", "touch" ]
     ] 
 }
 

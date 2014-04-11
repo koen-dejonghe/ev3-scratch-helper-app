@@ -11,7 +11,7 @@ http://wiki.scratch.mit.edu/wiki/Scratch_Extension_Protocol_%282.0%29
 
 How to use this thing
 =====================
-First you will need a Lego Mindsotrms EV3, equiped with the 0.8.0-alpha version of Lejos.
+First you will need a Lego Mindstorms EV3, equiped with the 0.8.0-alpha version of Lejos.
 For instructions, please see here: http://sourceforge.net/p/lejos/wiki/Home/
 
 I'm not sure if it will work with later versions of Lejos, but it won't work with older versions.

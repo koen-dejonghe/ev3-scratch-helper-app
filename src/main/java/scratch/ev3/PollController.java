@@ -20,12 +20,18 @@ public class PollController {
 	@Autowired
 	RMISampleProvider distanceSampleProvider;
 	
+	@Autowired
+	RMISampleProvider touchSampleProvider;
+
 	@RequestMapping("/poll")
 	public String poll(Model model) {
 
 		float distance = getSample(distanceSampleProvider);
+		float touch = getSample(touchSampleProvider);
 
 		model.addAttribute("distance", distance);
+		model.addAttribute("touch", touch);
+
 		return "poll";
 	}
 	
@@ -33,10 +39,15 @@ public class PollController {
 		try {
 			float[] fetchSample = provider.fetchSample();
 			return fetchSample[0];
-		} catch (RemoteException | NullPointerException | DeviceException e) {			
+		} catch (RemoteException | NullPointerException | DeviceException e) {
 			L.error(e.getMessage());
 			return 0;
 		}		
+	}
+	
+	private boolean getBooleanSample(RMISampleProvider provider){
+		float s = getSample(provider);
+		return s == 1.0;
 	}
 
 }
