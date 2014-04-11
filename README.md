@@ -28,7 +28,8 @@ In the installation folder you will find a file named application.properties.
 Edit this file, and set the ip address and the port numbers for sensors and motors.
 The names of the properties should be self explanatory.
 
-Boot the EV3, and start this application on your computer as follows:
+Boot the EV3, connect the sensors, motors according to the configuration 
+and start the application on your computer as follows:
 ```
 [koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew bootRun
 ```
