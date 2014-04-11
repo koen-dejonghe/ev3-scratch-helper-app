@@ -31,15 +31,17 @@ The names of the properties should be self explanatory.
 Boot the EV3, and start this application on your computer as follows:
 ```
 [koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew bootRun
-(Windows users can execute gradlew.bat instead) 
 ```
+(Windows users can execute gradlew.bat instead) 
 
 Next, on the same computer start the Scratch 2.0 offline editor.
 Press SHIFT, and click on File.
 At the bottom of the drop down menu you should see 'Import Experimental Extension'.
 Click that and import the file ev3-helper-app.s2e in the installation folder of this app.
 
-Now you should be able to use sensor values, and in the future also control motors.
+Now you should be able to use sensor values, and in the future also control motors from Scratch.
+I will add more sensors and control as I go. The ones that are more or less ready will automatically 
+appear in Scratch. 
 
 Please contact me for suggestions, bugs ...
 
