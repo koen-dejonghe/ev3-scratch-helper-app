@@ -3,3 +3,6 @@
 .project
 .settings
 target
+build
+.gradle
+.springBeans

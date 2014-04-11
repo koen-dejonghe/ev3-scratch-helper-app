@@ -14,7 +14,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'gs-serving-web-content'
+    baseName = 'ev3-scratch-helper-app'
     version =  '0.1.0'
 }
 
@@ -26,6 +26,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.thymeleaf:thymeleaf-spring4")
+    compile fileTree(dir: 'lib', include: '*.jar')
     testCompile("junit:junit")
 }
 
