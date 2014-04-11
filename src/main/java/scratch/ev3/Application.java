@@ -1,4 +1,4 @@
-package hello;
+package scratch.ev3;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.SpringApplication;
