@@ -1,9 +1,32 @@
 { 
-    "extensionName": "EV3 helper app", 
-    "extensionPort": 8080,
+    "extensionName": "EV3HelperApp", 
+    "extensionPort": 4321,
     "blockSpecs": [
+        [" ", "Connect a %m.motorType motor to port %m.motorPort", "connectMotor", "Large", "A" ],
+        [" ", "Set speed of motor %m.motorPort to %n", "speed", "A", 100 ],
+        [" ", "Run motor %m.motorPort forward", "forward", "A" ],
+        [" ", "Run motor %m.motorPort backward", "backward", "A" ],
+        [" ", "Stop motor %m.motorPort", "stop", "A" ],        
+        [" ", "Stop motor %m.motorPort immediately", "stopImmediate", "A" ],        
+        [" ", "Connect a %m.sensorType sensor to port %m.sensorPort", "connectSensor", "Color", "S1" ],
         ["r", "distance", "distance" ],
-        ["r", "touch", "touch" ]
-    ] 
+        ["r", "touch", "touch" ],
+        ["r", "color", "color" ],
+        ["r", "Speed of motor A", "speedMotorA" ],       
+        ["r", "Speed of motor B", "speedMotorB" ],       
+        ["r", "Speed of motor C", "speedMotorC" ],       
+        ["r", "Speed of motor D", "speedMotorD" ],       
+        ["r", "Max Speed of motor A", "maxSpeedMotorA" ],       
+        ["r", "Max Speed of motor B", "maxSpeedMotorB" ],       
+        ["r", "Max Speed of motor C", "maxSpeedMotorC" ],       
+        ["r", "Max Speed of motor D", "maxSpeedMotorD" ],       
+    ],
+    "menus": {
+    	"motorPort": [ "A", "B", "C", "D", ],
+    	"motorType": [ "Large", "Medium", ],
+    	"motorData": [ "Speed", "MaxSpeed", ],
+    	"sensorPort": [ "S1", "S2", "S3", "S4", ],
+    	"sensorType": [ "Color", "Distance", "Touch", ],
+    },  
 }
 

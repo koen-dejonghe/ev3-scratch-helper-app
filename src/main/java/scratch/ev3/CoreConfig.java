@@ -1,10 +1,10 @@
 package scratch.ev3;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 
-import lejos.remote.ev3.RMISampleProvider;
+import lejos.hardware.BrickFinder;
+import lejos.hardware.BrickInfo;
 import lejos.remote.ev3.RemoteEV3;
 
 import org.slf4j.Logger;
@@ -15,51 +15,41 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CoreConfig {
-	
+
 	private static final Logger L = LoggerFactory.getLogger(CoreConfig.class);
 
-	@Value("${ev3.ip.address}")
-    private String ev3IpAddress;
-	
-	@Value("${ev3.sensor.distance.port}")
-    private String ev3SensorDistancePort;
-		
-	@Value("${ev3.sensor.touch.port}")
-    private String ev3SensorTouchPort;
-		
 	@Bean
-	public RemoteEV3 ev3(){
-		RemoteEV3 ev3 = null;
-		try {
-			ev3 = new RemoteEV3(ev3IpAddress);
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			L.error("Unable to reach EV3", e);
+	public RemoteEV3 ev3() throws IOException, NotBoundException {
+		
+//		RemoteEV3 ev3 = new RemoteEV3("192.168.1.144");
+//		return ev3;
+
+		L.info("start searching for ev3");
+		BrickInfo[] bricks = BrickFinder.discover();
+
+		if (bricks != null && bricks.length > 0) {
+			BrickInfo brick = bricks[0];
+			String ipAddress = brick.getIPAddress();
+			L.info("connecting ev3 at address {}", ipAddress);
+
+			RemoteEV3 ev3 = new RemoteEV3(ipAddress);
+			ev3.setDefault();
+			
+			return ev3;
 		}
-		return ev3;
+
+		// TODO maybe use a better type of exception
+		throw new UnsupportedOperationException("Unable to find EV3");
 	}
 
-	/*
-	 * TODO: the sample providers are now created at start up.
-	 * That means if the sensor is not connected at start up, 
-	 * the program will never recover, even when the sensor is
-	 * connected later on.
-	 * This should be fixed.
-	 *
-	 */
-	
 	@Bean
-	public RMISampleProvider distanceSampleProvider(RemoteEV3 ev3) {
-		RMISampleProvider sp = ev3.createSampleProvider(ev3SensorDistancePort,
-				"lejos.hardware.sensor.EV3IRSensor", "Distance");
-		return sp;
+	public SensorComposite sensors() {
+		return new SensorComposite();
 	}
-	
+
 	@Bean
-	public RMISampleProvider touchSampleProvider(RemoteEV3 ev3) {
-		RMISampleProvider sp = ev3.createSampleProvider(ev3SensorTouchPort,
-				"lejos.hardware.sensor.EV3TouchSensor", "Touch");
-		return sp;
+	public MotorComposite motors() {
+		return new MotorComposite();
 	}
-	
-	
+
 }

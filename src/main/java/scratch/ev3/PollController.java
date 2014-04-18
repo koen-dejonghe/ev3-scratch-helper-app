@@ -3,6 +3,7 @@ package scratch.ev3;
 import java.rmi.RemoteException;
 
 import lejos.hardware.DeviceException;
+import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RMISampleProvider;
 
 import org.slf4j.Logger;
@@ -14,40 +15,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class PollController {
-	
-	private static final Logger L = LoggerFactory.getLogger(PollController.class);
-	
+
+	private static final Logger L = LoggerFactory
+			.getLogger(PollController.class);
+
 	@Autowired
-	RMISampleProvider distanceSampleProvider;
-	
+	SensorComposite sensors;
+
 	@Autowired
-	RMISampleProvider touchSampleProvider;
+	MotorComposite motors;
 
 	@RequestMapping("/poll")
-	public String poll(Model model) {
+	public String poll(Model model) throws RemoteException {
 
-		float distance = getSample(distanceSampleProvider);
-		float touch = getSample(touchSampleProvider);
+		// busy
+		StringBuffer runningCommands = new StringBuffer();
+		for (String commandId : motors.getRunningCommands()) {
+			runningCommands.append(commandId);
+			runningCommands.append(" ");
+		}
+		model.addAttribute("_busy", runningCommands.toString());
 
-		model.addAttribute("distance", distance);
-		model.addAttribute("touch", touch);
+		/*
+		 * // sensors for (String port : sensors.getPorts()) { RMISampleProvider
+		 * sensor = sensors.getSensor(port); float sample = getSample(sensor);
+		 * model.addAttribute("S" + port, sample); }
+		 */
+
+		// motors
+		for (String port : motors.getPorts()) {
+			RMIRegulatedMotor motor = motors.getMotor(port);
+			model.addAttribute("speedMotor" + port, motor.getSpeed());
+			model.addAttribute("maxSpeedMotor" + port,
+					motor.getMaxSpeed());
+			
+			/*
+			model.addAttribute("tachoCountMotor" + port,
+					motor.getTachoCount());
+			model.addAttribute("limitAngleMotor" + port,
+					motor.getLimitAngle());
+			*/
+		}
 
 		return "poll";
 	}
-	
-	private float getSample(RMISampleProvider provider){
+
+	private float getSample(RMISampleProvider provider) {
 		try {
 			float[] fetchSample = provider.fetchSample();
 			return fetchSample[0];
 		} catch (RemoteException | NullPointerException | DeviceException e) {
 			L.error(e.getMessage());
 			return 0;
-		}		
-	}
-	
-	private boolean getBooleanSample(RMISampleProvider provider){
-		float s = getSample(provider);
-		return s == 1.0;
+		}
 	}
 
 }
