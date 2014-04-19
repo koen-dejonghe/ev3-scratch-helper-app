@@ -20,7 +20,7 @@ public class MotorComposite {
 	@Autowired
 	private RemoteEV3 ev3;
 
-	private HashMap<String, RMIRegulatedMotor> motorMap = new HashMap<>();
+	private ConcurrentHashMap<String, RMIRegulatedMotor> motorMap = new ConcurrentHashMap<>();
 
 	private ConcurrentHashMap<String, Boolean> runningCommandIds = new ConcurrentHashMap<>();
 

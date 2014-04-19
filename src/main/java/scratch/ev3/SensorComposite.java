@@ -3,6 +3,7 @@ package scratch.ev3;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PreDestroy;
 
@@ -18,15 +19,15 @@ public class SensorComposite {
 	@Autowired
 	private RemoteEV3 ev3;
 
-	private HashMap<String, RMISampleProvider> sensorMap = new HashMap<>();
-	
+	private ConcurrentHashMap<String, RMISampleProvider> sensorMap = new ConcurrentHashMap<>();
+
 	private static final Logger L = LoggerFactory
 			.getLogger(SensorComposite.class);
-	
+
 	public SensorComposite() {
 	}
 
-	public void createSensor(String port, String type) {		
+	public void createSensor(String port, String type) {
 		RMISampleProvider sp = ev3.createSampleProvider(port,
 				typeToClassName(type), type);
 		sensorMap.put(port, sp);
@@ -40,32 +41,34 @@ public class SensorComposite {
 			return "lejos.hardware.sensor.EV3TouchSensor";
 		case "Color":
 			return "lejos.hardware.sensor.EV3ColorSensor";
-		}	
+		}
 		throw new IllegalArgumentException("Unknown sensor type " + type);
 	}
-	
-	public RMISampleProvider getSensor(String port){
+
+	public RMISampleProvider getSensor(String port) {
 		return sensorMap.get(port);
 	}
-	
-	public Set<String> getPorts(){
+
+	public Set<String> getPorts() {
 		return sensorMap.keySet();
 	}
 
 	@PreDestroy
 	public void closeAll() {
-		for (RMISampleProvider sensor : sensorMap.values()){
+		for (String port : sensorMap.keySet()) {
 			try {
-				sensor.close();
+				L.info("closing port {}", port);
+				sensorMap.get(port).close();
+				sensorMap.remove(port);
 			} catch (RemoteException e) {
-				L.error("Unable to close sensor", e);
+				L.error("error closing port {}", port, e);
 			}
 		}
 	}
 
 	public void createSensor(String port, String type, String commandId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
