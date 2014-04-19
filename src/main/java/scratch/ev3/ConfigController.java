@@ -34,7 +34,7 @@ public class ConfigController {
 		L.info("closing ports");
 		motors.closeAll();
 		sensors.closeAll();
-		return "reset_all";
+		return "ignored";
 	}
 
 	@RequestMapping("/crossdomain.xml")

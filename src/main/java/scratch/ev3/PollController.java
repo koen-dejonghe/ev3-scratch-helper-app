@@ -28,38 +28,32 @@ public class PollController {
 	@RequestMapping("/poll")
 	public String poll(Model model) throws RemoteException {
 
-		// busy
-		StringBuffer runningCommands = new StringBuffer();
-		for (String commandId : motors.getRunningCommands()) {
-			runningCommands.append(commandId);
-			runningCommands.append(" ");
-		}
-		model.addAttribute("_busy", runningCommands.toString());
+		model.addAttribute("_busy", makeBusyLine());
 
-		/*
-		 * // sensors for (String port : sensors.getPorts()) { RMISampleProvider
-		 * sensor = sensors.getSensor(port); float sample = getSample(sensor);
-		 * model.addAttribute("S" + port, sample); }
-		 */
+		// sensors
+		for (String port : sensors.getPorts()) {
+			RMISampleProvider sensor = sensors.getSensor(port);
+			float sample = getSample(sensor);
+			model.addAttribute("sensor" + port, sample);
+		}
 
 		// motors
 		for (String port : motors.getPorts()) {
 			RMIRegulatedMotor motor = motors.getMotor(port);
 			model.addAttribute("speedMotor" + port, motor.getSpeed());
-			model.addAttribute("maxSpeedMotor" + port,
-					motor.getMaxSpeed());
-			
+			model.addAttribute("maxSpeedMotor" + port, motor.getMaxSpeed());
+
 			/*
-			model.addAttribute("tachoCountMotor" + port,
-					motor.getTachoCount());
-			model.addAttribute("limitAngleMotor" + port,
-					motor.getLimitAngle());
-			*/
+			 * model.addAttribute("tachoCountMotor" + port,
+			 * motor.getTachoCount()); model.addAttribute("limitAngleMotor" +
+			 * port, motor.getLimitAngle());
+			 */
 		}
 
 		return "poll";
 	}
 
+	//TODO move this to SensorComposite
 	private float getSample(RMISampleProvider provider) {
 		try {
 			float[] fetchSample = provider.fetchSample();
@@ -69,5 +63,16 @@ public class PollController {
 			return 0;
 		}
 	}
+
+	private String makeBusyLine() {
+		// busy
+		StringBuffer runningCommands = new StringBuffer();
+		for (String commandId : motors.getRunningCommands()) {
+			runningCommands.append(commandId);
+			runningCommands.append(" ");
+		}
+		return runningCommands.toString();
+	}
+
 
 }

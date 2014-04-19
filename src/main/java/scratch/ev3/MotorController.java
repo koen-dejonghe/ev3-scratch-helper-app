@@ -2,7 +2,7 @@ package scratch.ev3;
 
 import java.rmi.RemoteException;
 
-import javax.servlet.http.HttpServletRequest;
+import lejos.remote.ev3.RMIRegulatedMotor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class MotorController {
@@ -27,15 +26,17 @@ public class MotorController {
 			@PathVariable("type") String type,
 			@PathVariable("port") String port, Model model)
 			throws RemoteException {
-		L.info("connecting a {} motor on port {}", type, port);
+		L.info("connecting a {} motor on port {}: start", type, port);
 		motors.createMotor(port, type, commandId);
-		return "motor";
+		L.info("connecting a {} motor on port {}: done", type, port);
+		return "ignored";
 	}
 
 	/**
 	 * Normally Scratch should add a command id to the request, but for some
-	 * reason when wait-command blocks are executed, Scratch just hangs.
-	 * See http://scratch.mit.edu/discuss/topic/35231/?page=1#post-302258
+	 * reason when wait-command blocks are executed, Scratch just hangs. See
+	 * http://scratch.mit.edu/discuss/topic/35231/?page=1#post-302258
+	 * 
 	 * @param type
 	 * @param port
 	 * @param model
@@ -46,51 +47,71 @@ public class MotorController {
 	public String connectMotorNoWait(@PathVariable("type") String type,
 			@PathVariable("port") String port, Model model)
 			throws RemoteException {
-		L.info("connecting a {} motor on port {}", type, port);
+		L.info("connecting a {} motor on port {}: start", type, port);
 		motors.createMotor(port, type);
-		return "motor";
+		L.info("connecting a {} motor on port {}: done", type, port);
+		return "ignored";
 	}
 
 	@RequestMapping("/speed/{port}/{speed}")
 	public String setSpeed(@PathVariable("port") String port,
 			@PathVariable("speed") int speed, Model model)
 			throws RemoteException {
-		motors.getMotor(port).setSpeed(speed);
-		return "motor";
+		RMIRegulatedMotor motor = motors.getMotor(port);
+		if (motor == null) {
+			L.error("motor on port {} is not connected", port);
+		} else {
+			motor.setSpeed(speed);
+		}
+		return "ignored";
 	}
 
 	@RequestMapping("/forward/{port}")
 	public String forward(@PathVariable("port") String port, Model model)
 			throws RemoteException {
-
-		if (motors.getMotor(port) == null) {
-
+		RMIRegulatedMotor motor = motors.getMotor(port);
+		if (motor == null) {
+			L.error("motor on port {} is not connected", port);
+		} else {
+			motor.forward();
 		}
-
-		motors.getMotor(port).forward();
-		return "motor";
+		return "ignored";
 	}
 
 	@RequestMapping("/backward/{port}")
 	public String backward(@PathVariable("port") String port, Model model)
 			throws RemoteException {
-		motors.getMotor(port).backward();
-		return "motor";
+		RMIRegulatedMotor motor = motors.getMotor(port);
+		if (motor == null) {
+			L.error("motor on port {} is not connected", port);
+		} else {
+			motor.backward();
+		}
+		return "ignored";
 	}
 
 	@RequestMapping("/stop/{port}")
 	public String stopImmediate(@PathVariable("port") String port)
 			throws RemoteException {
-		motors.getMotor(port).stop(false);
-		return "motor";
+		RMIRegulatedMotor motor = motors.getMotor(port);
+		if (motor == null) {
+			L.error("motor on port {} is not connected", port);
+		} else {
+			motor.stop(false);
+		}
+		return "ignored";
 	}
 
 	@RequestMapping("/stopImmediate/{port}")
 	public String stop(@PathVariable("port") String port, Model model)
 			throws RemoteException {
-		motors.getMotor(port).stop(true);
-		return "motor";
+		RMIRegulatedMotor motor = motors.getMotor(port);
+		if (motor == null) {
+			L.error("motor on port {} is not connected", port);
+		} else {
+			motor.stop(true);
+		}
+		return "ignored";
 	}
-
 
 }

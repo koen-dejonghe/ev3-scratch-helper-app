@@ -41,6 +41,7 @@ public class MotorComposite {
 			try {
 				L.info("closing port {}", port);
 				motorMap.get(port).close();
+				motorMap.remove(port);
 			} catch (RemoteException e) {
 				L.error("error closing port {}", port, e);
 			}

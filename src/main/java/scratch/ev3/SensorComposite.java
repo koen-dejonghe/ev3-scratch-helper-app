@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.annotation.PreDestroy;
+
 import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 
@@ -38,8 +40,8 @@ public class SensorComposite {
 			return "lejos.hardware.sensor.EV3TouchSensor";
 		case "Color":
 			return "lejos.hardware.sensor.EV3ColorSensor";
-		}		
-		return null;
+		}	
+		throw new IllegalArgumentException("Unknown sensor type " + type);
 	}
 	
 	public RMISampleProvider getSensor(String port){
@@ -50,6 +52,7 @@ public class SensorComposite {
 		return sensorMap.keySet();
 	}
 
+	@PreDestroy
 	public void closeAll() {
 		for (RMISampleProvider sensor : sensorMap.values()){
 			try {
@@ -58,6 +61,11 @@ public class SensorComposite {
 				L.error("Unable to close sensor", e);
 			}
 		}
+	}
+
+	public void createSensor(String port, String type, String commandId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
