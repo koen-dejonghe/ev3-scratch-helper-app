@@ -32,7 +32,7 @@ In the installation folder you will find a file named application.properties.
 Edit this file, if necessary.
 The names of the properties should be self explanatory.
 
-Boot the EV3, connect the sensors, motors according to the configuration 
+Boot the EV3, connect sensors and motors 
 and start the application on your computer as follows:
 ```
 [koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew bootRun
