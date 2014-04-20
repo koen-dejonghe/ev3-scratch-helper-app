@@ -1,7 +1,6 @@
 package scratch.ev3;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,6 +12,8 @@ import lejos.remote.ev3.RemoteEV3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class SensorComposite {
 
@@ -67,8 +68,7 @@ public class SensorComposite {
 	}
 
 	public void createSensor(String port, String type, String commandId) {
-		// TODO Auto-generated method stub
-
+		throw new NotImplementedException();
 	}
 
 }

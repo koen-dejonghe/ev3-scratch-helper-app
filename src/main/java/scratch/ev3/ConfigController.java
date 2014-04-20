@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,9 @@ public class ConfigController {
 
 	@Autowired
 	private SensorComposite sensors;
+	
+	@Value(value = "${server.port}")
+	private String serverPort;
 
 	/**
 	 * Scratch is sometimes sending reset_all requests at random.
@@ -38,9 +42,10 @@ public class ConfigController {
 	}
 
 	@RequestMapping("/crossdomain.xml")
-	public String flashXDomain(Model model) {
-		L.info("got cross domain request");
-		return null;
+	public String flashXDomain(Model model) {		
+		L.info("setting serverPort={} in xdomain request", serverPort);
+		model.addAttribute("serverPort", serverPort);
+		return "crossdomain";
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
