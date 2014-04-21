@@ -26,18 +26,23 @@ public class ConfigController {
 	@Value(value = "${server.port}")
 	private String serverPort;
 
+	@RequestMapping("/reset")
+	public String reset(Model model) {
+		L.info("closing ports");
+		motors.closeAll();
+		sensors.closeAll();
+		return "ignored";
+	}
+
 	/**
 	 * Scratch is sometimes sending reset_all requests at random.
 	 * For now, ignore them, and implement this as an explicit command
 	 * @param model
 	 * @return
 	 */
-	//@RequestMapping("/reset_all")
-	@RequestMapping("/reset")
+	@RequestMapping("/reset_all")
 	public String resetAll(Model model) {
-		L.info("closing ports");
-		motors.closeAll();
-		sensors.closeAll();
+		L.info("reset_all received");
 		return "ignored";
 	}
 
