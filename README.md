@@ -9,11 +9,17 @@ The idea behind this application is to be able to communicate with the Lego Mind
 This application is a so called helper app for the Scratch 2.0 Offline editor as described here:
 http://wiki.scratch.mit.edu/wiki/Scratch_Extension_Protocol_%282.0%29
 
-How to use this thing
-=====================
+What do I need
+==============
+Scratch 2.0 off line editor v404 (http://scratch.mit.edu/scratch2download/)
+JDK 1.7 (http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+Lego Mindstorms EV3 (http://www.lego.com/mindstorms/)
+Lejos 0.8.0-alpha (http://www.lejos.org/ev3.php)
+
+How do I use this thing
+=======================
 You need the Scratch 2.0 offline editor. This software has been tested on version v404.
 See also Known Issues below.
-
 
 Next you will need a Lego Mindstorms EV3, equiped with the 0.8.0-alpha version of Lejos.
 For instructions, please see here: http://sourceforge.net/p/lejos/wiki/Home/
@@ -23,9 +29,13 @@ The EV3 should also be equipped with a Wifi dongle, and the network must be conf
 
 Once this is done, you can get a copy of the code of this project from here:
 https://github.com/koen-dejonghe/ev3-scratch-helper-app
-You can clone it as follows: 
+If you are familiar with git (http://git-scm.com/), then I recommend you clone the project as follows: 
 ```
 git clone https://github.com/koen-dejonghe/ev3-scratch-helper-app.git
+```
+If git is unknown to you, you can download the project as a zip file from here:
+```
+https://github.com/koen-dejonghe/ev3-scratch-helper-app/archive/master.zip
 ```
 
 In the installation folder you will find a file named application.properties.
@@ -37,7 +47,12 @@ and start the application on your computer as follows:
 ```
 [koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew bootRun
 ```
-(Windows users can execute gradlew.bat instead) 
+If this is the first time you run this, and you are behind a firewall, then execute this:
+```
+[koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew -Dhttp.proxyHost=www.proxy.host -Dhttp.proxyPort=8080 bootRun
+```
+(Windows users should execute gradlew.bat instead) 
+
 The program will connect to the first available Brick in the network.
 If no Brick is found, then the program will end in error.
 
