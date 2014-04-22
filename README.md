@@ -11,10 +11,10 @@ http://wiki.scratch.mit.edu/wiki/Scratch_Extension_Protocol_%282.0%29
 
 What do I need
 ==============
-Scratch 2.0 off line editor v404 (http://scratch.mit.edu/scratch2download/)
-JDK 1.7 (http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
-Lego Mindstorms EV3 (http://www.lego.com/mindstorms/)
-Lejos 0.8.0-alpha (http://www.lejos.org/ev3.php)
+- Scratch 2.0 off line editor v404 (http://scratch.mit.edu/scratch2download/)
+- JDK 1.7 (http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+- Lego Mindstorms EV3 (http://www.lego.com/mindstorms/)
+- Lejos 0.8.0-alpha (http://www.lejos.org/ev3.php)
 
 How do I use this thing
 =======================
