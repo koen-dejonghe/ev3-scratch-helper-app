@@ -13,8 +13,8 @@ What do I need
 ==============
 - Scratch 2.0 off line editor v404 (http://scratch.mit.edu/scratch2download/)
 - JDK 1.7 (http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
-- Lego Mindstorms EV3 (http://www.lego.com/mindstorms/)
 - Lejos 0.8.0-alpha (http://www.lejos.org/ev3.php)
+- Hardware: Lego Mindstorms EV3 (http://www.lego.com/mindstorms/)
 
 How do I use this thing
 =======================
@@ -41,6 +41,8 @@ https://github.com/koen-dejonghe/ev3-scratch-helper-app/archive/master.zip
 In the installation folder you will find a file named application.properties.
 Edit this file, if necessary.
 The names of the properties should be self explanatory.
+However, make sure the server.port property in application.properties is identical
+to the extensionPort variable in ev3-helper-app.s2e.
 
 Boot the EV3, connect sensors and motors 
 and start the application on your computer as follows:
@@ -61,17 +63,24 @@ Press SHIFT, and click on File.
 At the bottom of the drop down menu you should see 'Import Experimental Extension'.
 Click that and import the file ev3-helper-app.s2e in the installation folder of this app.
 
-Now you should be able to use sensor values, and in the future also control motors from Scratch.
-I will add more sensors and control as I go. The ones that are more or less ready will automatically 
-appear in Scratch. 
+Now you should be able to use sensor values and to control motors from Scratch.
+I will add more sensors and motor controllers as I go. 
+The ones that are more or less ready will automatically appear in Scratch. 
 
 Demo program
 ============
 
 A very simple Scratch demo program is also included:
+
 scratch-ev3-demo.sb2
 
-Be sure to read the Konwn Issues.
+A slightly more complex program is included in:
+ 
+scratchcar.sb2
+
+The 'experimental extension' ev3-helper-app.s2e must still be imported, since scratch currently is not able to save extensions.
+
+Be sure to read the Known Issues.
 
 Known issues
 ============
