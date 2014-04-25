@@ -66,26 +66,22 @@ public class MotorController {
 		return "ignored";
 	}
 
-	@RequestMapping("/forward/{port}")
-	public String forward(@PathVariable("port") String port, Model model)
+	@RequestMapping("/run/{port}/{direction}")
+	public String forward(@PathVariable("port") String port,
+			@PathVariable("direction") String direction, Model model)
 			throws RemoteException {
 		RMIRegulatedMotor motor = motors.getMotor(port);
 		if (motor == null) {
 			L.error("motor on port {} is not connected", port);
-		} else {
-			motor.forward();
+			return "ignored";
 		}
-		return "ignored";
-	}
 
-	@RequestMapping("/backward/{port}")
-	public String backward(@PathVariable("port") String port, Model model)
-			throws RemoteException {
-		RMIRegulatedMotor motor = motors.getMotor(port);
-		if (motor == null) {
-			L.error("motor on port {} is not connected", port);
-		} else {
+		if ("Forward".equals(direction)) {
+			motor.forward();
+		} else if ("Backward".equals(direction)) {
 			motor.backward();
+		} else {
+			L.error("Unknown direction {}", direction);
 		}
 		return "ignored";
 	}
