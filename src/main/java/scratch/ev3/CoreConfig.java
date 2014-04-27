@@ -41,17 +41,20 @@ public class CoreConfig {
 		while (true) {
 			L.info("searching for ev3...");
 			try {
-				BrickInfo[] bricks = BrickFinder.discover();
 
-				if (bricks != null && bricks.length > 0) {
-					BrickInfo brick = bricks[0];
+				for (BrickInfo brick : BrickFinder.discover()) {
 
 					String ipAddress = brick.getIPAddress();
-					L.info("brick of type {} found at address {}",
-							brick.getType(), ipAddress);
+					String type = brick.getType();
 
-					// TODO check if the brick is an ev3
+					L.info("brick of type {} found at address {}", type,
+							ipAddress);
 
+					if (! "EV3".equals(type)){
+						L.info("brick at {} is not an ev3");
+						continue;
+					}
+					
 					try {
 						RemoteEV3 ev3 = new RemoteEV3(ipAddress);
 						ev3.setDefault();

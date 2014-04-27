@@ -55,19 +55,20 @@ public class PollController {
 		for (String port : motors.getPorts()) {
 			String speedAttr = "speedMotor" + port;
 			String maxSpeedAttr = "maxSpeedMotor" + port;
+			String tachoCount = "tachoCountMotor" + port;
+			String limitAngle = "limitAngleMotor" + port;
+
 			if (throttlingCounter == 0) {
 				RMIRegulatedMotor motor = motors.getMotor(port);
 				modelMap.put(speedAttr, motor.getSpeed());
 				modelMap.put(maxSpeedAttr, motor.getMaxSpeed());
+				modelMap.put(tachoCount, motor.getTachoCount());
+				modelMap.put(limitAngle, motor.getLimitAngle());
 			}
 			model.addAttribute(speedAttr, modelMap.get(speedAttr));
 			model.addAttribute(maxSpeedAttr, modelMap.get(maxSpeedAttr));
-
-			/*
-			 * model.addAttribute("tachoCountMotor" + port,
-			 * motor.getTachoCount()); model.addAttribute("limitAngleMotor" +
-			 * port, motor.getLimitAngle());
-			 */
+			model.addAttribute(tachoCount, modelMap.get(tachoCount));
+			model.addAttribute(limitAngle, modelMap.get(limitAngle));
 		}
 
 		if (++throttlingCounter >= pollThrottle) {

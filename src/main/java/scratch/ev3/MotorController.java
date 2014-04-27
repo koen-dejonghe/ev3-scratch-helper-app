@@ -110,4 +110,18 @@ public class MotorController {
 		return "ignored";
 	}
 
+	@RequestMapping("/resetTachoCount/{port}")
+	public String resetTachoCount(@PathVariable("port") String port, Model model)
+			throws RemoteException {
+		RMIRegulatedMotor motor = motors.getMotor(port);
+		if (motor == null) {
+			L.error("motor on port {} is not connected", port);
+			return "ignored";
+		}
+
+		motor.resetTachoCount();
+		
+		return "ignored";
+	}
+
 }
