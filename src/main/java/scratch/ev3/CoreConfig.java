@@ -1,7 +1,9 @@
 package scratch.ev3;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 import lejos.hardware.BrickFinder;
 import lejos.hardware.BrickInfo;
@@ -22,33 +24,54 @@ public class CoreConfig {
 	private String ev3IpAddress;
 
 	@Bean
-	public RemoteEV3 ev3() throws IOException, NotBoundException {
+	public RemoteEV3 ev3() {
 
-		if (ev3IpAddress != null && ev3IpAddress.length() > 0) {
-			L.info("using ev3 ip address from application.properties: {}", ev3IpAddress);
-			RemoteEV3 ev3 = new RemoteEV3(ev3IpAddress);
-			return ev3;
+		try {
+			if (ev3IpAddress != null && ev3IpAddress.length() > 0) {
+				L.info("using ev3 ip address from application.properties: {}",
+						ev3IpAddress);
+				RemoteEV3 ev3 = new RemoteEV3(ev3IpAddress);
+				return ev3;
+			}
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			L.error("unable to connect to ev3 at address {}: {}", ev3IpAddress,
+					e.getMessage());
 		}
 
-		L.info("start searching for ev3");
-		BrickInfo[] bricks = BrickFinder.discover();
+		while (true) {
+			L.info("searching for ev3...");
+			try {
+				BrickInfo[] bricks = BrickFinder.discover();
 
-		if (bricks != null && bricks.length > 0) {
-			BrickInfo brick = bricks[0];
-			
-			// TODO check if the brick is an ev3
+				if (bricks != null && bricks.length > 0) {
+					BrickInfo brick = bricks[0];
 
-			String ipAddress = brick.getIPAddress();
-			L.info("connecting ev3 at address {}", ipAddress);
+					String ipAddress = brick.getIPAddress();
+					L.info("brick of type {} found at address {}",
+							brick.getType(), ipAddress);
 
-			RemoteEV3 ev3 = new RemoteEV3(ipAddress);
-			ev3.setDefault();
+					// TODO check if the brick is an ev3
 
-			return ev3;
+					try {
+						RemoteEV3 ev3 = new RemoteEV3(ipAddress);
+						ev3.setDefault();
+						return ev3;
+					} catch (RemoteException | MalformedURLException
+							| NotBoundException e) {
+						L.error("unable to connect to ev3 at address {}: {}",
+								ipAddress, e.getMessage());
+					}
+				}
+			} catch (IOException e) {
+				// ignore this error ?
+			}
+
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException ie) {
+				L.error("error while trying to sleep", ie);
+			}
 		}
-
-		// TODO maybe use a better type of exception
-		throw new UnsupportedOperationException("Unable to find EV3");
 	}
 
 	@Bean
