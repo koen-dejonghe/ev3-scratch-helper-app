@@ -56,12 +56,12 @@ If this is the first time you run this, and you are behind a firewall, then exec
 (Windows users should execute gradlew.bat instead) 
 
 The program will connect to the first available Brick in the network.
-If no Brick is found, then the program will end in error.
+If no Brick is found, it will wait for the firt EV3 to become available.
 
 Next, on the same computer start the Scratch 2.0 offline editor.
 Press SHIFT, and click on File.
 At the bottom of the drop down menu you should see 'Import Experimental Extension'.
-Click that and import the file ev3-helper-app.s2e in the installation folder of this app.
+Click that and import the file ev3-helper-app.s2e in the scratch/extensions folder of this app.
 
 Now you should be able to use sensor values and to control motors from Scratch.
 I will add more sensors and motor controllers as I go. 
@@ -70,15 +70,11 @@ The ones that are more or less ready will automatically appear in Scratch.
 Demo program
 ============
 
-A very simple Scratch demo program is also included:
-
-scratch-ev3-demo.sb2
-
-A slightly more complex program is included in:
+A demo program is included in:
  
-scratchcar.sb2
+scratch/demo/scratchcar.sb2
 
-The 'experimental extension' ev3-helper-app.s2e must still be imported, since scratch currently is not able to save extensions.
+The 'experimental extension' scratch/extensions/ev3-helper-app.s2e must still be imported after having opened the demo, since scratch currently is not able to save extensions.
 
 Be sure to read the Known Issues.
 
