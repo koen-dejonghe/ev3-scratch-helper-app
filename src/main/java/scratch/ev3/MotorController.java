@@ -86,4 +86,18 @@ public class MotorController {
 		return "ignored";
 	}
 
+	@RequestMapping("/rotate/{port}/{angle}")
+	public String rotate(@PathVariable("port") String port,
+			@PathVariable("angle") int angle, Model model) {
+		motors.rotate(port, angle);
+		return "ignored";
+	}
+
+	@RequestMapping("/rotateTo/{port}/{limitAngle}")
+	public String rotateTo(@PathVariable("port") String port,
+			@PathVariable("limitAngle") int limitAngle, Model model) {
+		motors.rotate(port, limitAngle);
+		return "ignored";
+	}
+
 }

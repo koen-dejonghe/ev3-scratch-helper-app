@@ -254,4 +254,37 @@ public class MotorComposite {
 					e.getMessage());
 		}
 	}
+
+	public void rotate(String port, int angle) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to rotate motor on port {}: port is not initialized",
+					port);
+			return;
+		}
+
+		try {
+			motor.rotate(angle);
+		} catch (RemoteException e) {
+			L.error("unable to rotate motor on port {}: {}", port,
+					e.getMessage());
+		}
+	}
+
+	public void rotateTo(String port, int limitAngle) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to rotateTo motor on port {}: port is not initialized",
+					port);
+			return;
+		}
+
+		try {
+			motor.rotateTo(limitAngle);
+		} catch (RemoteException e) {
+			L.error("unable to rotateTo motor on port {}: {}", port,
+					e.getMessage());
+		}
+	}
+
 }
