@@ -3,10 +3,6 @@ package scratch.ev3;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
-import lejos.hardware.DeviceException;
-import lejos.remote.ev3.RMIRegulatedMotor;
-import lejos.remote.ev3.RMISampleProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,36 +36,9 @@ public class PollController {
 		// wait commands are currently either buggy or not supported by scratch
 		// model.addAttribute("_busy", makeBusyLine());
 
-		// sensors
-		for (String port : sensors.getPorts()) {
-			String attr = "sensor" + port;
-			if (throttlingCounter == 0) {
-				RMISampleProvider sensor = sensors.getSensor(port);
-				float sample = getSample(sensor);
-				modelMap.put(attr, sample);
-			}
-			model.addAttribute(attr, modelMap.get(attr));
-		}
+		pollSensors(model);
 
-		// motors
-		for (String port : motors.getPorts()) {
-			String speedAttr = "speedMotor" + port;
-			String maxSpeedAttr = "maxSpeedMotor" + port;
-			String tachoCount = "tachoCountMotor" + port;
-			String limitAngle = "limitAngleMotor" + port;
-
-			if (throttlingCounter == 0) {
-				RMIRegulatedMotor motor = motors.getMotor(port);
-				modelMap.put(speedAttr, motor.getSpeed());
-				modelMap.put(maxSpeedAttr, motor.getMaxSpeed());
-				modelMap.put(tachoCount, motor.getTachoCount());
-				modelMap.put(limitAngle, motor.getLimitAngle());
-			}
-			model.addAttribute(speedAttr, modelMap.get(speedAttr));
-			model.addAttribute(maxSpeedAttr, modelMap.get(maxSpeedAttr));
-			model.addAttribute(tachoCount, modelMap.get(tachoCount));
-			model.addAttribute(limitAngle, modelMap.get(limitAngle));
-		}
+		pollMotors(model);
 
 		if (++throttlingCounter >= pollThrottle) {
 			throttlingCounter = 0;
@@ -77,15 +46,38 @@ public class PollController {
 		return "poll";
 	}
 
-	// TODO move this to SensorComposite
-	private float getSample(RMISampleProvider provider) {
-		try {
-			float[] fetchSample = provider.fetchSample();
-			return fetchSample[0];
-		} catch (RemoteException | NullPointerException | DeviceException e) {
-			L.error(e.getMessage());
-			return 0;
+	private void pollSensors(Model model) {
+		for (String port : sensors.getPorts()) {
+			String attr = "sensor" + port;
+
+			if (throttlingCounter == 0) {
+				float sample = sensors.getSample(port);
+				modelMap.put(attr, sample);
+			}
+			model.addAttribute(attr, modelMap.get(attr));
 		}
+	}
+
+	private void pollMotors(Model model) {
+		for (String port : motors.getPorts()) {
+			String speedAttr = "speedMotor" + port;
+			String maxSpeedAttr = "maxSpeedMotor" + port;
+			String tachoCount = "tachoCountMotor" + port;
+			String limitAngle = "limitAngleMotor" + port;
+
+			if (throttlingCounter == 0) {
+				modelMap.put(speedAttr, motors.getSpeed(port));
+				modelMap.put(maxSpeedAttr, motors.getMaxSpeed(port));
+				modelMap.put(tachoCount, motors.getTachoCount(port));
+				modelMap.put(limitAngle, motors.getLimitAngle(port));
+			}
+
+			model.addAttribute(speedAttr, modelMap.get(speedAttr));
+			model.addAttribute(maxSpeedAttr, modelMap.get(maxSpeedAttr));
+			model.addAttribute(tachoCount, modelMap.get(tachoCount));
+			model.addAttribute(limitAngle, modelMap.get(limitAngle));
+		}
+
 	}
 
 	@SuppressWarnings("unused")

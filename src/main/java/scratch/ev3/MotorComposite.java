@@ -40,27 +40,38 @@ public class MotorComposite {
 			try {
 				L.info("closing port {}", port);
 				motorMap.get(port).close();
-				motorMap.remove(port);
 			} catch (RemoteException e) {
 				L.error("error closing port {}", port, e);
+			}
+			finally {
+				motorMap.remove(port);
 			}
 		}
 	}
 
-	public void createMotor(String port, String type, String commandId)
-			throws RemoteException {
-
-		if (motorMap.get(port) != null) {
-			L.info("closing motor port {}", port);
-			motorMap.get(port).close();
+	public void close(String port) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to close port {}: port is not initialized", port);
+			return;
 		}
 
+		try {
+			motor.close();			
+		} catch (RemoteException e) {
+			L.error("unable to close port {}: {}", port, e.getMessage());
+		}
+		finally {
+			motorMap.remove(port);
+		}
+
+	}
+
+	public void createMotor(String port, String type, String commandId) {
 		L.info("adding commandId {} to running commands", commandId);
 		runningCommandIds.put(commandId, true);
 
-		char t = type.charAt(0);
-		RMIRegulatedMotor motor = ev3.createRegulatedMotor(port, t);
-		motorMap.put(port, motor);
+		createMotor(port, type);
 
 		L.info("removing commandId {} from running commands", commandId);
 		runningCommandIds.remove(commandId);
@@ -75,16 +86,13 @@ public class MotorComposite {
 	 * @param type
 	 * @throws RemoteException
 	 */
-	public void createMotor(String port, String type) throws RemoteException {
-		if (motorMap.get(port) != null) {
-			L.info("closing motor port {}", port);
-			motorMap.get(port).close();
-		}
+	public void createMotor(String port, String type) {
+
+		close(port);
 
 		char t = type.charAt(0);
 		RMIRegulatedMotor motor = ev3.createRegulatedMotor(port, t);
 		motorMap.put(port, motor);
-
 	}
 
 	public Set<String> getRunningCommands() {
@@ -100,11 +108,150 @@ public class MotorComposite {
 	}
 
 	public RMIRegulatedMotor getMotor(String port) {
-		return motorMap.get(port);
+		RMIRegulatedMotor motor = motorMap.get(port);
+		return motor;
 	}
 
 	public Set<String> getPorts() {
 		return motorMap.keySet();
 	}
 
+	public int getSpeed(String port) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to retrieve speed from port {}: port is not initialized",
+					port);
+			return 0;
+		}
+
+		try {
+			int speed = motor.getSpeed();
+			return speed;
+		} catch (RemoteException e) {
+			L.error("unable to retrieve speed from port {}: {}", port,
+					e.getMessage());
+			return 0;
+		}
+	}
+
+	public float getMaxSpeed(String port) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to retrieve maximum speed from port {}: port is not initialized",
+					port);
+			return 0;
+		}
+
+		try {
+			float speed = motor.getMaxSpeed();
+			return speed;
+		} catch (RemoteException e) {
+			L.error("unable to retrieve speed from port {}: {}", port,
+					e.getMessage());
+			return 0;
+		}
+	}
+
+	public int getTachoCount(String port) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to retrieve tacho count from port {}: port is not initialized",
+					port);
+			return 0;
+		}
+
+		try {
+			int tachoCount = motor.getTachoCount();
+			return tachoCount;
+		} catch (RemoteException e) {
+			L.error("unable to retrieve tacho count from port {}: {}", port,
+					e.getMessage());
+			return 0;
+		}
+	}
+
+	public int getLimitAngle(String port) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to retrieve limit angle from port {}: port is not initialized",
+					port);
+			return 0;
+		}
+
+		try {
+			int limitAngle = motor.getLimitAngle();
+			return limitAngle;
+		} catch (RemoteException e) {
+			L.error("unable to retrieve limit angle from port {}: {}", port,
+					e.getMessage());
+			return 0;
+		}
+	}
+
+	public void setSpeed(String port, int speed) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to set speed on port {}: port is not initialized",
+					port);
+			return;
+		}
+
+		try {
+			motor.setSpeed(speed);
+		} catch (RemoteException e) {
+			L.error("unable to set speed on port {}: {}", port, e.getMessage());
+		}
+	}
+
+	public void move(String port, String direction) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to move motor on port {}: port is not initialized",
+					port);
+			return;
+		}
+
+		try {
+			if ("Forward".equals(direction)) {
+				motor.forward();
+			} else if ("Backward".equals(direction)) {
+				motor.backward();
+			} else {
+				L.error("Unknown direction {}", direction);
+			}
+		} catch (RemoteException e) {
+			L.error("unable to move motor on port {}: {}", port, e.getMessage());
+		}
+	}
+
+	public void stop(String port, boolean immediate) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to stop motor on port {}: port is not initialized",
+					port);
+			return;
+		}
+
+		try {
+			motor.stop(immediate);
+		} catch (RemoteException e) {
+			L.error("unable to stop motor on port {}: {}", port, e.getMessage());
+		}
+	}
+
+	public void resetTachoCount(String port) {
+		RMIRegulatedMotor motor = motorMap.get(port);
+		if (motor == null) {
+			L.error("unable to reset tacho count on port {}: port is not initialized",
+					port);
+			return;
+		}
+
+		try {
+			motor.resetTachoCount();
+		} catch (RemoteException e) {
+			L.error("unable to reset tacho count on port {}: {}", port,
+					e.getMessage());
+		}
+	}
 }

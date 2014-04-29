@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PreDestroy;
 
+import lejos.hardware.DeviceException;
 import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 
@@ -67,8 +68,43 @@ public class SensorComposite {
 		}
 	}
 
+	public void close(String port) {
+		RMISampleProvider sensor = sensorMap.get(port);
+		if (sensor == null) {
+			L.error("unable to close port {}: port is not initialized", port);
+			return;
+		}
+
+		try {
+			sensor.close();
+		} catch (RemoteException e) {
+			L.error("unable to close port {}: {}", port, e.getMessage());
+		} finally {
+			sensorMap.remove(port);
+		}
+
+	}
+
 	public void createSensor(String port, String type, String commandId) {
 		throw new NotImplementedException();
+	}
+
+	public float getSample(String port) {
+
+		RMISampleProvider sensor = sensorMap.get(port);
+		if (sensor == null) {
+			L.error("unable to read from port {}: port is not initialized",
+					port);
+			return 0;
+		}
+
+		try {
+			float[] fetchSample = sensor.fetchSample();
+			return fetchSample[0];
+		} catch (RemoteException | NullPointerException | DeviceException e) {
+			L.error("unable to read from port {}: {}", port, e.getMessage());
+			return 0;
+		}
 	}
 
 }

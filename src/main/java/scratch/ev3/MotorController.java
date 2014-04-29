@@ -2,8 +2,6 @@ package scratch.ev3;
 
 import java.rmi.RemoteException;
 
-import lejos.remote.ev3.RMIRegulatedMotor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +22,13 @@ public class MotorController {
 	@RequestMapping("/connectMotor/{commandId}/{type}/{port}")
 	public String connectMotor(@PathVariable("commandId") String commandId,
 			@PathVariable("type") String type,
-			@PathVariable("port") String port, Model model)
-			throws RemoteException {
+			@PathVariable("port") String port, Model model) {
+		
 		L.info("connecting a {} motor on port {}: start", type, port);
 		motors.createMotor(port, type, commandId);
 		L.info("connecting a {} motor on port {}: done", type, port);
 		return "ignored";
+	
 	}
 
 	/**
@@ -45,82 +44,45 @@ public class MotorController {
 	 */
 	@RequestMapping("/connectMotor/{type}/{port}")
 	public String connectMotorNoWait(@PathVariable("type") String type,
-			@PathVariable("port") String port, Model model)
-			throws RemoteException {
+			@PathVariable("port") String port, Model model) {
+	
 		L.info("connecting a {} motor on port {}: start", type, port);
 		motors.createMotor(port, type);
 		L.info("connecting a {} motor on port {}: done", type, port);
 		return "ignored";
+	
 	}
 
 	@RequestMapping("/speed/{port}/{speed}")
 	public String setSpeed(@PathVariable("port") String port,
-			@PathVariable("speed") int speed, Model model)
-			throws RemoteException {
-		RMIRegulatedMotor motor = motors.getMotor(port);
-		if (motor == null) {
-			L.error("motor on port {} is not connected", port);
-		} else {
-			motor.setSpeed(speed);
-		}
+			@PathVariable("speed") int speed, Model model) {
+		motors.setSpeed(port, speed);
 		return "ignored";
 	}
 
 	@RequestMapping("/run/{port}/{direction}")
 	public String forward(@PathVariable("port") String port,
-			@PathVariable("direction") String direction, Model model)
-			throws RemoteException {
-		RMIRegulatedMotor motor = motors.getMotor(port);
-		if (motor == null) {
-			L.error("motor on port {} is not connected", port);
-			return "ignored";
-		}
-
-		if ("Forward".equals(direction)) {
-			motor.forward();
-		} else if ("Backward".equals(direction)) {
-			motor.backward();
-		} else {
-			L.error("Unknown direction {}", direction);
-		}
+			@PathVariable("direction") String direction, Model model) {
+		motors.move(port, direction);
 		return "ignored";
 	}
 
 	@RequestMapping("/stop/{port}")
-	public String stopImmediate(@PathVariable("port") String port)
-			throws RemoteException {
-		RMIRegulatedMotor motor = motors.getMotor(port);
-		if (motor == null) {
-			L.error("motor on port {} is not connected", port);
-		} else {
-			motor.stop(false);
-		}
+	public String stopImmediate(@PathVariable("port") String port) {
+		motors.stop(port, false);
 		return "ignored";
 	}
 
 	@RequestMapping("/stopImmediate/{port}")
 	public String stop(@PathVariable("port") String port, Model model)
 			throws RemoteException {
-		RMIRegulatedMotor motor = motors.getMotor(port);
-		if (motor == null) {
-			L.error("motor on port {} is not connected", port);
-		} else {
-			motor.stop(true);
-		}
+		motors.stop(port, true);
 		return "ignored";
 	}
 
 	@RequestMapping("/resetTachoCount/{port}")
-	public String resetTachoCount(@PathVariable("port") String port, Model model)
-			throws RemoteException {
-		RMIRegulatedMotor motor = motors.getMotor(port);
-		if (motor == null) {
-			L.error("motor on port {} is not connected", port);
-			return "ignored";
-		}
-
-		motor.resetTachoCount();
-		
+	public String resetTachoCount(@PathVariable("port") String port, Model model) {
+		motors.resetTachoCount(port);
 		return "ignored";
 	}
 
