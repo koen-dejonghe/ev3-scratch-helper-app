@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
-import lejos.remote.ev3.RemoteEV3;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MotorComposite {
 
 	@Autowired
-	private RemoteEV3 ev3;
+	private RemoteEV3Inf ev3;
 
 	private ConcurrentHashMap<String, RMIRegulatedMotor> motorMap = new ConcurrentHashMap<>();
 
@@ -31,11 +30,15 @@ public class MotorComposite {
 
 	@PostConstruct
 	public void postConstruct() {
+
 	}
 
 	// TODO find out why this is not working
 	@PreDestroy
 	public void closeAll() {
+		
+		System.err.println("predestroy");
+
 		for (String port : motorMap.keySet()) {
 			try {
 				L.info("closing port {}", port);

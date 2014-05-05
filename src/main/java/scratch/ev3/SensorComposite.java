@@ -8,7 +8,6 @@ import javax.annotation.PreDestroy;
 
 import lejos.hardware.DeviceException;
 import lejos.remote.ev3.RMISampleProvider;
-import lejos.remote.ev3.RemoteEV3;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class SensorComposite {
 
 	@Autowired
-	private RemoteEV3 ev3;
+	private RemoteEV3Inf ev3;
 
 	private ConcurrentHashMap<String, RMISampleProvider> sensorMap = new ConcurrentHashMap<>();
 
