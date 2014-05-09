@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
@@ -25,19 +24,8 @@ public class MotorComposite {
 	private static final Logger L = LoggerFactory
 			.getLogger(MotorComposite.class);
 
-	public MotorComposite() {
-	}
-
-	@PostConstruct
-	public void postConstruct() {
-
-	}
-
-	// TODO find out why this is not working
-	@PreDestroy
+	@PreDestroy // TODO @PreDestroy annotation is not working
 	public void closeAll() {
-		
-		System.err.println("predestroy");
 
 		for (String port : motorMap.keySet()) {
 			try {
@@ -45,8 +33,7 @@ public class MotorComposite {
 				motorMap.get(port).close();
 			} catch (RemoteException e) {
 				L.error("error closing port {}", port, e);
-			}
-			finally {
+			} finally {
 				motorMap.remove(port);
 			}
 		}
@@ -60,11 +47,10 @@ public class MotorComposite {
 		}
 
 		try {
-			motor.close();			
+			motor.close();
 		} catch (RemoteException e) {
 			L.error("unable to close port {}: {}", port, e.getMessage());
-		}
-		finally {
+		} finally {
 			motorMap.remove(port);
 		}
 
