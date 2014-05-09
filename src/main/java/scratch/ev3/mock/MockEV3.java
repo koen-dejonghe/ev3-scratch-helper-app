@@ -17,7 +17,7 @@ import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RMIWifi;
 
-public class EV3Mock implements RemoteEV3Inf {
+public class MockEV3 implements RemoteEV3Inf {
 
 	@Override
 	public String getHost() {

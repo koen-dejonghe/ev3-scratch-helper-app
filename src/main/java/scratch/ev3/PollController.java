@@ -18,7 +18,7 @@ public class PollController {
 	@Autowired
 	private MotorComposite motors;
 
-	@Value("#{T(java.lang.Integer).parseInt('${poll.throttle}')}")
+	@Value("#{T(java.lang.Integer).parseInt('${poll.throttle:10}')}")
 	private Integer pollThrottle;
 
 	private HashMap<String, Object> modelMap = new HashMap<>();

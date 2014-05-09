@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 public class PollControllerTest {
 
 
-    @Test
+    //@Test
     public void test() {
         // assertions against myBean ...
     }
