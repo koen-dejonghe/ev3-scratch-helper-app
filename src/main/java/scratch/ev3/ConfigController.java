@@ -26,7 +26,7 @@ public class ConfigController {
 	@Value(value = "${server.port}")
 	private String serverPort;
 
-	@RequestMapping("/reset")
+	@RequestMapping("/closeAll")
 	public String reset(Model model) {
 		L.info("closing ports");
 		motors.closeAll();
