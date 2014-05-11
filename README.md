@@ -78,9 +78,11 @@ The 'experimental extension' scratch/extensions/ev3-helper-app.s2e must still be
 
 The first thing to do when using this demo program is to initialize the brick. You can do this by clicking on the 'Initialize' button. Then monitor the log output of the help app, to see if all devices have been connected. 
 For example, when connecting a color sensor to port 2, you should see a similar message to the following, before you can use the rest of the demo program:
+```
 2014-05-11 19:08:04.352  INFO 4262 --- [nio-4321-exec-5] scratch.ev3.SensorController             : connecting a Color sensor on port S2: start
 ...
 2014-05-11 19:08:04.353  INFO 4262 --- [nio-4321-exec-5] scratch.ev3.SensorController             : connecting a Color sensor on port S2: done
+```
 Note that some devices take more time to connect than others, so the 'done' messages may not appear in the same order as the 'start' messages.
 
 The demo program has been documented. Here is a brief description of what you can do with it:
