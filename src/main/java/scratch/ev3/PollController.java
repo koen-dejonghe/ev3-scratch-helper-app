@@ -72,7 +72,6 @@ public class PollController {
 			model.addAttribute(tachoCount, modelMap.get(tachoCount));
 			model.addAttribute(limitAngle, modelMap.get(limitAngle));
 		}
-
 	}
 
 	@SuppressWarnings("unused")
