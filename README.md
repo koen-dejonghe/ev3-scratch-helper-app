@@ -27,7 +27,7 @@ For instructions, please see here: http://sourceforge.net/p/lejos/wiki/Home/
 I'm not sure if it will work with later versions of Lejos, but it won't work with older versions.
 The EV3 should also be equipped with a Wifi dongle, and the network must be configured.
 
-Once this is done, you can get a copy of the code of this project from here:
+Once this is done, you can get a copy of the code of the project from here:
 https://github.com/koen-dejonghe/ev3-scratch-helper-app
 If you are familiar with git (http://git-scm.com/), then I recommend you clone the project as follows: 
 ```
@@ -47,16 +47,16 @@ to the extensionPort variable in ev3-helper-app.s2e.
 Boot the EV3, connect sensors and motors 
 and start the application on your computer as follows:
 ```
-[koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew bootRun
+./gradlew bootRun
 ```
 If this is the first time you run this, and you are behind a firewall, then execute this:
 ```
-[koen:~/workspaces … ev3-scratch-helper-app] $ ./gradlew -Dhttp.proxyHost=www.proxy.host -Dhttp.proxyPort=8080 bootRun
+./gradlew -Dhttp.proxyHost=www.proxy.host -Dhttp.proxyPort=8080 bootRun
 ```
 (Windows users should execute gradlew.bat instead) 
 
 The program will connect to the first available Brick in the network.
-If no Brick is found, it will wait for the firt EV3 to become available.
+If no Brick is found, it will wait for the first EV3 to become available.
 
 Next, on the same computer start the Scratch 2.0 offline editor.
 Press SHIFT, and click on File.
@@ -89,7 +89,7 @@ There is currently no other way than to monitor the logs of the helper app to se
 
 Another issue is that Lejos does not provide a way to report the current state of the connections through RMI.
 This helper app assumes all connections are still to be established.
-Therefore it's advised to close all ports before shutting down the helper app,  by clicking the reset button in the demo program for example.
+Therefore it's advised to close all ports before shutting down the helper app,  by clicking the Close button in the demo program for example.
 
 
 
