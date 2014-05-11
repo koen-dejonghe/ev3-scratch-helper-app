@@ -63,6 +63,8 @@ public class MotorController {
 	@RequestMapping("/run/{port}/{direction}")
 	public String forward(@PathVariable("port") String port,
 			@PathVariable("direction") String direction, Model model) {
+		if (L.isDebugEnabled())
+			L.debug("motor {}: moving {}", port, direction);
 		motors.move(port, direction);
 		return "ignored";
 	}

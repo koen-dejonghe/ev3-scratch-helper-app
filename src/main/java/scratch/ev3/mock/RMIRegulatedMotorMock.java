@@ -5,12 +5,21 @@ import java.rmi.RemoteException;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.robotics.RegulatedMotorListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class RMIRegulatedMotorMock implements RMIRegulatedMotor {
 
 	private int speed = 380;
+	private String port;
+	private char type;
+
+	private static final Logger L = LoggerFactory
+			.getLogger(RMIRegulatedMotorMock.class);
 
 	public RMIRegulatedMotorMock(String portName, char motorType) {
-		// TODO Auto-generated constructor stub
+		this.port = portName;
+		this.type = motorType;
 	}
 
 	@Override
@@ -117,12 +126,12 @@ public class RMIRegulatedMotorMock implements RMIRegulatedMotor {
 
 	@Override
 	public void forward() throws RemoteException {
-		System.out.println("running forward");
+		L.info("Motor {}: running forward at speed {}", port, speed);
 	}
 
 	@Override
 	public void backward() throws RemoteException {
-		System.out.println("running backward");
+		L.info("Motor {}: running backward at speed {}", port, speed);
 	}
 
 	@Override

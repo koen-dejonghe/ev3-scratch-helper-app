@@ -22,7 +22,7 @@ public class ConfigController {
 
 	@Autowired
 	private SensorComposite sensors;
-	
+
 	@Value(value = "${server.port}")
 	private String serverPort;
 
@@ -35,8 +35,9 @@ public class ConfigController {
 	}
 
 	/**
-	 * Scratch is sometimes sending reset_all requests at random.
-	 * For now, ignore them, and implement this as an explicit command
+	 * Scratch is sometimes sending reset_all requests at random. For now,
+	 * ignore them, and implement this as an explicit command
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -47,15 +48,16 @@ public class ConfigController {
 	}
 
 	@RequestMapping("/crossdomain.xml")
-	public String flashXDomain(Model model) {		
-		L.info("setting serverPort={} in xdomain request", serverPort);
+	public String flashXDomain(Model model) {
+		if (L.isDebugEnabled())
+			L.debug("setting serverPort={} in xdomain request", serverPort);
 		model.addAttribute("serverPort", serverPort);
 		return "crossdomain";
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String catchAll(HttpServletRequest req) {
-		L.error(req.getRequestURI());
+		L.error("received unknown request: {}", req.getRequestURI());
 		return null;
 	}
 
