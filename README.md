@@ -87,6 +87,7 @@ The demo program has been documented. Here is a brief description of what you ca
 - Pressing 'f' will invoke a line-follower program.  The color sensor must be connected to sensor port 2. The line itself can be any color, but the background must be white (sensor value 6). The algorithm is a simplistic implementation of the bit logic method. It works for lines with smooth curves only, and it's slow.
 - After having pressed 'g', you will be able to use the arrow keys to control the movements of the robot.
 - Pressing 'b' will invoke an obstacle avoiding program.  The distance sensor must be connected to sensor port 1.
+- Pressing the space bar will stop all motors. 
 
 To disconnect the devices from the ports, press the 'Close' button. This is recommended before stopping the helper app.
 
