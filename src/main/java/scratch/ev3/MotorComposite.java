@@ -283,25 +283,60 @@ public class MotorComposite {
 
 	public void play(ArrayList<HashMap<String, Object>> history) {
 
-		for (HashMap<String, Object> state : history){
+		Integer oldSpeedA = 0;
+		Integer oldSpeedB = 0;
+		String oldDirectionA = "";
+		String oldDirectionB = "";
+		
+		long startPlaying = System.currentTimeMillis();
+
+		for (HashMap<String, Object> state : history) {
 			String directionMotorA = (String) state.get("directionMotorA");
 			String directionMotorB = (String) state.get("directionMotorB");
 			Integer speedMotorA = (Integer) state.get("speedMotorA");
 			Integer speedMotorB = (Integer) state.get("speedMotorB");
-			
-			setSpeed("A", speedMotorA);
-			setSpeed("B", speedMotorB);
-			
-			move("A", directionMotorA);
-			move("B", directionMotorB);
-			
+
+			L.debug("speedMotorA={}", speedMotorA);
+			L.debug("speedMotorB={}", speedMotorB);
+			L.debug("directionMotorA={}", directionMotorA);
+			L.debug("directionMotorB={}", directionMotorB);
+
+			if (speedMotorA != oldSpeedA) {
+				setSpeed("A", speedMotorA);
+				oldSpeedA = speedMotorA;
+			}
+
+			if (speedMotorB != oldSpeedB) {
+				setSpeed("B", speedMotorB);
+				oldSpeedB = speedMotorB;
+			}
+
+			if (directionMotorA != null
+					&& !directionMotorA.equals(oldDirectionA)) {
+				move("A", directionMotorA);
+				oldDirectionA = directionMotorA;
+			}
+
+			if (directionMotorB != null
+					&& !directionMotorB.equals(oldDirectionB)) {
+				move("B", directionMotorB);
+				oldDirectionB = directionMotorB;
+			}
+
 			try {
-				Thread.sleep(300);
+				Thread.sleep(30);
 			} catch (InterruptedException e) {
 				L.error(e.getMessage());
 			}
 		}
+
+		stop("A", true);
+		stop("B", true);
+
+		long endPlaying = System.currentTimeMillis();
 		
+		L.debug("playing recording took {} ms", endPlaying - startPlaying);
+
 	}
 
 }

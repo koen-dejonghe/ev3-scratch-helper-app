@@ -31,6 +31,8 @@ public class PollController {
 	private int throttlingCounter = 0;
 
 	private boolean recording = false;
+	private long startRecording = 0;
+	private long endRecording = 0;
 
 	private static final Logger L = LoggerFactory
 			.getLogger(PollController.class);
@@ -46,7 +48,7 @@ public class PollController {
 		pollMotors(model);
 
 		if (++throttlingCounter >= pollThrottle) {
-			modelMap.clear();
+			//modelMap.clear();
 			throttlingCounter = 0;
 		}
 
@@ -97,31 +99,36 @@ public class PollController {
 		}
 	}
 
-	@RequestMapping("/record/start")
+	@RequestMapping("/startRecording")
 	public String startRecording(Model model) {
 		recording = true;
 		history.clear();
+		startRecording = System.currentTimeMillis();
 		return "ignored";
 	}
 
-	@RequestMapping("/record/stop")
+	@RequestMapping("/stopRecording")
 	public String stopRecording(Model model) {
 		recording = false;
+		endRecording = System.currentTimeMillis();
 		if (L.isDebugEnabled()) {
 			L.debug("history dump: {}", history);
+			L.debug("recording took {} ms", endRecording - startRecording);
 		}
 		return "ignored";
 	}
 
-	@RequestMapping("/record/play")
+	@RequestMapping("/playRecording")
 	public String playRecording(Model model) {
 		motors.play(history);
 		return "ignored";
 	}
 
 	private void record() {
-		if (modelMap.size() > 0)
-			history.add(modelMap);
+		if (modelMap.size() > 0) {
+			HashMap<String, Object> m = new HashMap<>(modelMap);
+			history.add(m);
+		}
 	}
 
 	@SuppressWarnings("unused")
@@ -133,10 +140,6 @@ public class PollController {
 			runningCommands.append(" ");
 		}
 		return runningCommands.toString();
-	}
-
-	public class State {
-
 	}
 
 }
