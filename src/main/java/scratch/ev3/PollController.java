@@ -1,8 +1,11 @@
 package scratch.ev3;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,7 +26,16 @@ public class PollController {
 
 	private HashMap<String, Object> modelMap = new HashMap<>();
 
+	private ArrayList<HashMap<String, Object>> history = new ArrayList<>();
+
 	private int throttlingCounter = 0;
+
+	private boolean recording = false;
+	private long startRecording = 0;
+	private long endRecording = 0;
+
+	private static final Logger L = LoggerFactory
+			.getLogger(PollController.class);
 
 	@RequestMapping("/poll")
 	public String poll(Model model) throws RemoteException {
@@ -36,8 +48,18 @@ public class PollController {
 		pollMotors(model);
 
 		if (++throttlingCounter >= pollThrottle) {
+			//modelMap.clear();
 			throttlingCounter = 0;
 		}
+
+		if (L.isTraceEnabled()) {
+			L.trace("throttlingCounter={}", throttlingCounter);
+		}
+
+		if (recording) {
+			record();
+		}
+
 		return "poll";
 	}
 
@@ -59,20 +81,54 @@ public class PollController {
 			String maxSpeedAttr = "maxSpeedMotor" + port;
 			String tachoCount = "tachoCountMotor" + port;
 			String limitAngle = "limitAngleMotor" + port;
+			String direction = "directionMotor" + port;
 
 			if (throttlingCounter == 0) {
 				modelMap.put(speedAttr, motors.getSpeed(port));
 				modelMap.put(maxSpeedAttr, motors.getMaxSpeed(port));
 				modelMap.put(tachoCount, motors.getTachoCount(port));
 				modelMap.put(limitAngle, motors.getLimitAngle(port));
+				modelMap.put(direction, motors.getDirection(port));
 			}
 
 			model.addAttribute(speedAttr, modelMap.get(speedAttr));
 			model.addAttribute(maxSpeedAttr, modelMap.get(maxSpeedAttr));
 			model.addAttribute(tachoCount, modelMap.get(tachoCount));
 			model.addAttribute(limitAngle, modelMap.get(limitAngle));
+			model.addAttribute(direction, modelMap.get(direction));
 		}
+	}
 
+	@RequestMapping("/startRecording")
+	public String startRecording(Model model) {
+		recording = true;
+		history.clear();
+		startRecording = System.currentTimeMillis();
+		return "ignored";
+	}
+
+	@RequestMapping("/stopRecording")
+	public String stopRecording(Model model) {
+		recording = false;
+		endRecording = System.currentTimeMillis();
+		if (L.isDebugEnabled()) {
+			L.debug("history dump: {}", history);
+			L.debug("recording took {} ms", endRecording - startRecording);
+		}
+		return "ignored";
+	}
+
+	@RequestMapping("/playRecording")
+	public String playRecording(Model model) {
+		motors.play(history);
+		return "ignored";
+	}
+
+	private void record() {
+		if (modelMap.size() > 0) {
+			HashMap<String, Object> m = new HashMap<>(modelMap);
+			history.add(m);
+		}
 	}
 
 	@SuppressWarnings("unused")
