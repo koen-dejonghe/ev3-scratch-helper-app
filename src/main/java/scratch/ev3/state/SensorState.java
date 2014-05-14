@@ -1,4 +1,4 @@
-package scratch.ev3;
+package scratch.ev3.state;
 
 public class SensorState {
 

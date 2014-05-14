@@ -1,6 +1,8 @@
 package scratch.ev3;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,23 +21,19 @@ public class MotorComposite {
 
 	private ConcurrentHashMap<String, RMIRegulatedMotor> motorMap = new ConcurrentHashMap<>();
 
+	private ConcurrentHashMap<String, String> directionMap = new ConcurrentHashMap<>();
+
 	private ConcurrentHashMap<String, Boolean> runningCommandIds = new ConcurrentHashMap<>();
 
 	private static final Logger L = LoggerFactory
 			.getLogger(MotorComposite.class);
 
-	@PreDestroy // TODO @PreDestroy annotation is not working
+	@PreDestroy
+	// TODO @PreDestroy annotation is not working
 	public void closeAll() {
-
 		for (String port : motorMap.keySet()) {
-			try {
-				L.info("closing port {}", port);
-				motorMap.get(port).close();
-			} catch (RemoteException e) {
-				L.error("error closing port {}", port, e);
-			} finally {
-				motorMap.remove(port);
-			}
+			L.info("closing port {}", port);
+			close(port);
 		}
 	}
 
@@ -52,6 +50,7 @@ public class MotorComposite {
 			L.error("unable to close port {}: {}", port, e.getMessage());
 		} finally {
 			motorMap.remove(port);
+			directionMap.remove(port);
 		}
 
 	}
@@ -200,6 +199,8 @@ public class MotorComposite {
 			return;
 		}
 
+		directionMap.put(port, direction);
+
 		try {
 			if ("Forward".equals(direction)) {
 				motor.forward();
@@ -274,6 +275,33 @@ public class MotorComposite {
 			L.error("unable to rotateTo motor on port {}: {}", port,
 					e.getMessage());
 		}
+	}
+
+	public String getDirection(String port) {
+		return directionMap.get(port);
+	}
+
+	public void play(ArrayList<HashMap<String, Object>> history) {
+
+		for (HashMap<String, Object> state : history){
+			String directionMotorA = (String) state.get("directionMotorA");
+			String directionMotorB = (String) state.get("directionMotorB");
+			Integer speedMotorA = (Integer) state.get("speedMotorA");
+			Integer speedMotorB = (Integer) state.get("speedMotorB");
+			
+			setSpeed("A", speedMotorA);
+			setSpeed("B", speedMotorB);
+			
+			move("A", directionMotorA);
+			move("B", directionMotorB);
+			
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				L.error(e.getMessage());
+			}
+		}
+		
 	}
 
 }
