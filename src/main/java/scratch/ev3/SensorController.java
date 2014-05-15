@@ -24,6 +24,9 @@ public class SensorController {
 			@PathVariable("type") String type,
 			@PathVariable("port") String port, Model model)
 			throws RemoteException {
+		
+		type = Translator.translateSensorType(type);
+		
 		L.info("connecting a {} sensor on port {}: start", type, port);
 		sensors.createSensor(port, type, commandId);
 		L.info("connecting a {} sensor on port {}: done", type, port);
@@ -45,6 +48,9 @@ public class SensorController {
 	public String connectSensorNoWait(@PathVariable("type") String type,
 			@PathVariable("port") String port, Model model)
 			throws RemoteException {
+		
+		type = Translator.translateSensorType(type);
+
 		L.info("connecting a {} sensor on port {}: start", type, port);
 		sensors.createSensor(port, type);
 		L.info("connecting a {} sensor on port {}: done", type, port);

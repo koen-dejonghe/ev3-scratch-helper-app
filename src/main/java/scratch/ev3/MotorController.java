@@ -23,12 +23,14 @@ public class MotorController {
 	public String connectMotor(@PathVariable("commandId") String commandId,
 			@PathVariable("type") String type,
 			@PathVariable("port") String port, Model model) {
-		
+
+		type = Translator.translateMotorType(type);
+
 		L.info("connecting a {} motor on port {}: start", type, port);
 		motors.createMotor(port, type, commandId);
 		L.info("connecting a {} motor on port {}: done", type, port);
 		return "ignored";
-	
+
 	}
 
 	/**
@@ -45,12 +47,14 @@ public class MotorController {
 	@RequestMapping("/connectMotor/{type}/{port}")
 	public String connectMotorNoWait(@PathVariable("type") String type,
 			@PathVariable("port") String port, Model model) {
-	
+
+		type = Translator.translateMotorType(type);
+
 		L.info("connecting a {} motor on port {}: start", type, port);
 		motors.createMotor(port, type);
 		L.info("connecting a {} motor on port {}: done", type, port);
 		return "ignored";
-	
+
 	}
 
 	@RequestMapping("/speed/{port}/{speed}")
@@ -60,9 +64,12 @@ public class MotorController {
 		return "ignored";
 	}
 
-	@RequestMapping("/run/{port}/{direction}")
-	public String forward(@PathVariable("port") String port,
+	@RequestMapping("/move/{port}/{direction}")
+	public String move(@PathVariable("port") String port,
 			@PathVariable("direction") String direction, Model model) {
+
+		direction = Translator.translateDirection(direction);
+
 		if (L.isDebugEnabled())
 			L.debug("motor {}: moving {}", port, direction);
 		motors.move(port, direction);
