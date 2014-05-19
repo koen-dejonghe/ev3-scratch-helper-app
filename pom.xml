@@ -29,14 +29,11 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/ev3classes-0.8.0-alpha.jar</systemPath>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-test-mvc-htmlunit</artifactId>
-			<version>1.0.0.M1</version>
+			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-htmlunit-driver</artifactId>

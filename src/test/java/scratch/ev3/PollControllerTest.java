@@ -1,16 +1,21 @@
 package scratch.ev3;
 
-import org.junit.After;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,39 +26,20 @@ public class PollControllerTest {
 
 	@Autowired
 	private WebApplicationContext context;
-	
-	@Autowired
-	RemoteEV3Inf ev3;
 
-	private WebDriver driver;
+	private MockMvc mockMvc;
 
 	@Before
 	public void setup() {
-		//MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		//driver = new MockMvcHtmlUnitDriver(mockMvc, true);
-		driver = new HtmlUnitDriver();
-	}
-
-	@After
-	public void destroy() {
-		if (driver != null) {
-			driver.close();
-		}
+		MockitoAnnotations.initMocks(this);
+		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 	}
 
 	@Test
-	public void test() {
-		driver.get("http://localhost:4321/poll");
-		String pageSource = driver.getPageSource();				
-		System.out.println(pageSource);
-		System.out.println(driver.getCurrentUrl());
-		
-		try {
-			Thread.sleep(10000000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public void loadRootAndReceivePollResults() throws Exception {
+		mockMvc.perform(get("/poll"))
+		.andExpect(status().isOk())                 
+		.andExpect(model().attribute("speedMotorA", isEmptyOrNullString()))
+		;
 	}
 }

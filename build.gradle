@@ -29,7 +29,6 @@ dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
     
     testCompile("junit:junit")
-	testCompile 'org.springframework:spring-test-mvc-htmlunit:1.0.0.M1'
 	testCompile "org.seleniumhq.selenium:selenium-htmlunit-driver:2.41.0"
 
 }
