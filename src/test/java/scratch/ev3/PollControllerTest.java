@@ -1,6 +1,7 @@
 package scratch.ev3;
 
 import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -27,6 +29,12 @@ public class PollControllerTest {
 	@Autowired
 	private WebApplicationContext context;
 
+	@Autowired
+	MotorComposite motors;
+
+	@Autowired
+	SensorComposite sensors;
+
 	private MockMvc mockMvc;
 
 	@Before
@@ -37,9 +45,18 @@ public class PollControllerTest {
 
 	@Test
 	public void loadRootAndReceivePollResults() throws Exception {
-		mockMvc.perform(get("/poll"))
-		.andExpect(status().isOk())                 
-		.andExpect(model().attribute("speedMotorA", isEmptyOrNullString()))
-		;
+
+		motors.createMotor("A", "L");
+		motors.setSpeed("A", 400);
+
+		sensors.createSensor("S1", "Distance");
+
+		ResultActions perform = mockMvc.perform(get("/poll"));
+
+		perform.andExpect(status().isOk());
+		perform.andExpect(model().attribute("speedMotorA", 400));
+		perform.andExpect(model().attribute("sensorS1",
+				not(isEmptyOrNullString())));
+
 	}
 }
