@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 
 public class RMISampleProviderMock implements RMISampleProvider {
 
+	@SuppressWarnings("unused")
 	private String portName;
+	@SuppressWarnings("unused")
 	private String sensorName;
 	private String modeName;
 

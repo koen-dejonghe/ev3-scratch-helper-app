@@ -12,6 +12,7 @@ public class RMIRegulatedMotorMock implements RMIRegulatedMotor {
 
 	private int speed = 380;
 	private String port;
+	@SuppressWarnings("unused")
 	private char type;
 
 	private static final Logger L = LoggerFactory
