@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PreDestroy;
-
 import lejos.remote.ev3.RMIRegulatedMotor;
 
 import org.slf4j.Logger;
@@ -28,8 +26,6 @@ public class MotorComposite {
 	private static final Logger L = LoggerFactory
 			.getLogger(MotorComposite.class);
 
-	@PreDestroy
-	// TODO @PreDestroy annotation is not working
 	public void closeAll() {
 		for (String port : motorMap.keySet()) {
 			L.info("closing port {}", port);

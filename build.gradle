@@ -25,6 +25,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.thymeleaf:thymeleaf-spring4")
 	compile fileTree(dir: 'lib', include: '*.jar')
+	compile 'org.springframework.boot:spring-boot-starter-remote-shell'	
 
 	testCompile "junit:junit"
 	testCompile "org.springframework:spring-test"

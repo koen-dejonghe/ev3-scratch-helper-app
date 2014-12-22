@@ -4,8 +4,6 @@ import java.rmi.RemoteException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PreDestroy;
-
 import lejos.hardware.DeviceException;
 import lejos.remote.ev3.RMISampleProvider;
 
@@ -54,7 +52,6 @@ public class SensorComposite {
 		return sensorMap.keySet();
 	}
 
-	@PreDestroy
 	public void closeAll() {
 		for (String port : sensorMap.keySet()) {
 			try {
