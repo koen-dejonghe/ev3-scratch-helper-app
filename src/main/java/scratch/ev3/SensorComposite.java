@@ -67,7 +67,7 @@ public class SensorComposite {
 	public String status() {
 		StringBuffer sb = new StringBuffer();
 		for (String port : sensorMap.keySet()) {
-			sb.append("sensor on port " + port + ": connected");
+			sb.append("sensor on port " + port + ": connected\n");
 		}
 		String s = sb.toString();
 		L.debug(s);

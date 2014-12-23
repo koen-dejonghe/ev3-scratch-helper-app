@@ -105,6 +105,7 @@ Currently only a couple of commands have been implemented:
 - esha shutdown: close ports and shutdown the application
 - esha motorstatus: list connected motors
 - esha sensorstatus: list connected sensors
+
 (esha is an acronym for ev3-scratch-helper-app)
 For more information on this ssh shell implementation, see http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-remote-shell
 

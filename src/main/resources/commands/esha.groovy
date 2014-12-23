@@ -44,6 +44,19 @@ class esha {
 		SensorComposite sensors = bf.getBean("sensors")
 		return sensors.status()
 	}
-}
+
+	
+	@Usage("battery")
+	@Command
+	def battery(InvocationContext context) {
+
+		DefaultListableBeanFactory bf = context.attributes."spring.beanfactory"
+
+		RemoteEV3Inf ev3 = bf.getBean("ev3")
+		return ev3.power.batteryCurrent
+	}
+
+	
+	}
 
 

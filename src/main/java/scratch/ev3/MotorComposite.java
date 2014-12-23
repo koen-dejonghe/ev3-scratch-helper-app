@@ -36,7 +36,7 @@ public class MotorComposite {
 	public String status() {
 		StringBuffer sb = new StringBuffer();
 		for (String port : motorMap.keySet()) {
-			sb.append("motor on port " + port + ": connected");
+			sb.append("motor on port " + port + ": connected\n");
 		}
 		return sb.toString();
 	}
