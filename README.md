@@ -13,7 +13,7 @@ What do I need
 ==============
 - Scratch 2.0 off line editor v404 (http://scratch.mit.edu/scratch2download/)
 - JDK 1.7 (http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
-- Lejos 0.8.0-alpha (http://www.lejos.org/ev3.php)
+- Lejos 0.8.1-beta (http://www.lejos.org/ev3.php)
 - Hardware: Lego Mindstorms EV3 (http://www.lego.com/mindstorms/)
 
 How do I use this thing
@@ -21,7 +21,7 @@ How do I use this thing
 You need the Scratch 2.0 offline editor. This software has been tested on version v404.
 See also Known Issues below.
 
-Next you will need a Lego Mindstorms EV3, equiped with the 0.8.0-alpha version of Lejos.
+Next you will need a Lego Mindstorms EV3, equiped with the 0.8.1-beta version of Lejos.
 For instructions, please see here: http://sourceforge.net/p/lejos/wiki/Home/
 
 I'm not sure if it will work with later versions of Lejos, but it won't work with older versions.
@@ -107,6 +107,7 @@ Currently only a couple of commands have been implemented:
 - esha sensorstatus: list connected sensors
 
 (esha is an acronym for ev3-scratch-helper-app)
+
 For more information on this ssh shell implementation, see http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-remote-shell
 
 Known issues
