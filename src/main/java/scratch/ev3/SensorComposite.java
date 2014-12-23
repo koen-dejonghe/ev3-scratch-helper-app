@@ -63,6 +63,17 @@ public class SensorComposite {
 			}
 		}
 	}
+	
+	public String status() {
+		StringBuffer sb = new StringBuffer();
+		for (String port : sensorMap.keySet()) {
+			sb.append("sensor on port " + port + ": connected");
+		}
+		String s = sb.toString();
+		L.debug(s);
+		return s;
+	}
+
 
 	public void close(String port) {
 		RMISampleProvider sensor = sensorMap.get(port);

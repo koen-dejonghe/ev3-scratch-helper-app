@@ -26,7 +26,8 @@ dependencies {
 	compile("org.thymeleaf:thymeleaf-spring4")
 	compile fileTree(dir: 'lib', include: '*.jar')
 	compile 'org.springframework.boot:spring-boot-starter-remote-shell'	
-
+	compile 'org.springframework.shell:spring-shell:1.1.0.RELEASE'
+	
 	testCompile "junit:junit"
 	testCompile "org.springframework:spring-test"
 	testCompile "org.hamcrest:hamcrest-all:1.3"

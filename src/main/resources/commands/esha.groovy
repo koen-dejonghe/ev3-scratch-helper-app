@@ -9,9 +9,11 @@ import scratch.ev3.*
 @Usage("EV3 Scratch Helper App")
 class esha {
 
+
 	@Usage("shutdown")
 	@Command
 	def shutdown(InvocationContext context) {
+
 		DefaultListableBeanFactory bf = context.attributes."spring.beanfactory"
 
 		SensorComposite sensors = bf.getBean("sensors")
@@ -21,6 +23,26 @@ class esha {
 		motors.closeAll()
 
 		System.exit(0)
+	}
+
+	@Usage("motorstatus")
+	@Command
+	def motorstatus(InvocationContext context) {
+
+		DefaultListableBeanFactory bf = context.attributes."spring.beanfactory"
+
+		MotorComposite motors = bf.getBean("motors")
+		return motors.status()
+	}
+
+	@Usage("sensorstatus")
+	@Command
+	def sensorstatus(InvocationContext context) {
+
+		DefaultListableBeanFactory bf = context.attributes."spring.beanfactory"
+
+		SensorComposite sensors = bf.getBean("sensors")
+		return sensors.status()
 	}
 }
 

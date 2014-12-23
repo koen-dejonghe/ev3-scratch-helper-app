@@ -96,6 +96,18 @@ To disconnect the devices from the ports, press the 'Close' button. This is reco
 
 Be sure to read the Known Issues.
 
+Remote Shell
+============
+The server application can be connected via ssh on port 4322 (unless changed in application.properties).
+The userid/password for this connection is admin/admin by default. This can also be configured in application.properties.
+Connecting will start a shell from where you can execute some custom commands.
+Currently only a couple of commands have been implemented:
+- esha shutdown: close ports and shutdown the application
+- esha motorstatus: list connected motors
+- esha sensorstatus: list connected sensors
+(esha is an acronym for ev3-scratch-helper-app)
+For more information on this ssh shell implementation, see http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-remote-shell
+
 Known issues
 ============
 Version v404 of the Scratch 2.0 offline editor does not support wait-command blocks in a bug free way.

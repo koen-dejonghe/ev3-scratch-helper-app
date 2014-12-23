@@ -33,6 +33,14 @@ public class MotorComposite {
 		}
 	}
 
+	public String status() {
+		StringBuffer sb = new StringBuffer();
+		for (String port : motorMap.keySet()) {
+			sb.append("motor on port " + port + ": connected");
+		}
+		return sb.toString();
+	}
+
 	public void close(String port) {
 		RMIRegulatedMotor motor = motorMap.get(port);
 		if (motor == null) {
